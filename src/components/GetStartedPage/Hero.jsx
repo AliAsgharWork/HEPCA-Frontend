@@ -2,7 +2,7 @@ import styles from "../../style";
 import { discount, robot, research } from "../../assets";
 import { Upload, CallsTable } from "../GetStartedPage";
 
-import GetStarted from "../GetStarted";
+import GetStarted from "../Home/GetStarted";
 
 const Hero = () => {
   return (

@@ -10,7 +10,7 @@ import {
   Stats,
   Testimonials,
   Hero,
-} from "../components";
+} from "../components/Home";
 
 const Home = () => (
   <div className="bg-primary w-full overflow-hidden">
