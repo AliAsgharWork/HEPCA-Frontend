@@ -561,6 +561,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 import { Link, useNavigate } from "react-router-dom";
+import CallService from "../../service/CallService";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -663,14 +664,52 @@ const rows = [
   createData("Oreo39", 437, 18.0),
 ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
+import { useEffect, useState } from "react";
+
 export default function CustomPaginationActionsTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [selected, setSelected] = React.useState("");
   const navigate = useNavigate();
+
+  // componentDidMount() {
+  //   CallService.getBooks().then((res) => {
+  //     console.log(res.data);
+  //     this.setState({ book_info: res.data });
+  //   });
+  // }
+
+  // const [data, setData] = React.useState([]);
+  const [row2, setRow2] = React.useState([]);
+
+  const createRows = (data) => {
+    const rower = [];
+    data.forEach((element) => {
+      rower.push(createData(element.name));
+    });
+
+    setRow2(rower);
+    console.log("row2");
+    console.log(row2);
+  };
+
+  const fetchData = () => {
+    CallService.getCalls()
+      .then((response) => response.data)
+      .then((data) => {
+        // console.log("hello");
+        // createRows(data);
+        createRows(data);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - row2.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -693,8 +732,8 @@ export default function CustomPaginationActionsTable() {
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableBody>
             {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
+              ? row2.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : row2
             ).map((row) => (
               <TableRow
                 key={row.name}
@@ -731,12 +770,12 @@ export default function CustomPaginationActionsTable() {
               <TablePagination
                 rowsPerPageOptions={[8, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={rows.length}
+                count={row2.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
                   inputProps: {
-                    "aria-label": "rows per page",
+                    "aria-label": "row2 per page",
                   },
                   native: true,
                 }}

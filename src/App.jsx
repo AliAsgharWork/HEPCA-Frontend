@@ -45,7 +45,7 @@
 
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, GetStarted } from "./pages";
+import { Home, GetStarted, Roz_test } from "./pages";
 
 function App() {
   return (
@@ -53,6 +53,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/getstarted" element={<GetStarted />} />
+        <Route path="/roz_test" element={<Roz_test />} />
       </Routes>
     </BrowserRouter>
   );
