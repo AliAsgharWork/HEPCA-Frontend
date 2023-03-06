@@ -682,7 +682,7 @@ export default function CustomPaginationActionsTable() {
     });
 
     // Sorting by Name (Maybe do not need it)
-    rower = rower.sort((a, b) => (a.name < b.name ? -1 : 1));
+    // rower = rower.sort((a, b) => (a.name < b.name ? -1 : 1)); DONT USE IT BREAKS PAGINATION
 
     setRows(rower);
     // console.log("rows");
