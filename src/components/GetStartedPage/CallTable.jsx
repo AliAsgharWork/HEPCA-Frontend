@@ -561,7 +561,8 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 import { Link, useNavigate } from "react-router-dom";
-import CallService from "../../service/CallService";
+// import CallService from "../../service/CallService";
+import TopicService from "../../service/TopicService";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -636,33 +637,33 @@ function createData(name, calories, fat) {
   return { name };
 }
 
-const rows = [
-  createData("Cupcake", 305, 3.7),
-  createData("Donut", 452, 25.0),
-  createData("Eclair", 262, 16.0),
-  createData("Frozen yoghurt", 159, 6.0),
-  createData("Gingerbread", 356, 16.0),
-  createData("Honeycomb", 408, 3.2),
-  createData("Ice cream sandwich", 237, 9.0),
-  createData("Jelly Bean", 375, 0.0),
-  createData("KitKat", 518, 26.0),
-  createData("Lollipop", 392, 0.2),
-  createData("Marshmallow", 318, 0),
-  createData("Nougat", 360, 19.0),
-  createData("Oreo", 437, 18.0),
-  createData("Oreo1", 437, 18.0),
-  createData("Oreo2", 437, 18.0),
-  createData("Oreo3", 437, 18.0),
-  createData("Jelly Bean1", 375, 0.0),
-  createData("KitKat2", 518, 26.0),
-  createData("Lollipop3", 392, 0.2),
-  createData("Marshmallow4", 318, 0),
-  createData("Nougat5", 360, 19.0),
-  createData("Oreo6", 437, 18.0),
-  createData("Oreo17", 437, 18.0),
-  createData("Oreo28", 437, 18.0),
-  createData("Oreo39", 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
+// const rows = [
+//   createData("Cupcake", 305, 3.7),
+//   createData("Donut", 452, 25.0),
+//   createData("Eclair", 262, 16.0),
+//   createData("Frozen yoghurt", 159, 6.0),
+//   createData("Gingerbread", 356, 16.0),
+//   createData("Honeycomb", 408, 3.2),
+//   createData("Ice cream sandwich", 237, 9.0),
+//   createData("Jelly Bean", 375, 0.0),
+//   createData("KitKat", 518, 26.0),
+//   createData("Lollipop", 392, 0.2),
+//   createData("Marshmallow", 318, 0),
+//   createData("Nougat", 360, 19.0),
+//   createData("Oreo", 437, 18.0),
+//   createData("Oreo1", 437, 18.0),
+//   createData("Oreo2", 437, 18.0),
+//   createData("Oreo3", 437, 18.0),
+//   createData("Jelly Bean1", 375, 0.0),
+//   createData("KitKat2", 518, 26.0),
+//   createData("Lollipop3", 392, 0.2),
+//   createData("Marshmallow4", 318, 0),
+//   createData("Nougat5", 360, 19.0),
+//   createData("Oreo6", 437, 18.0),
+//   createData("Oreo17", 437, 18.0),
+//   createData("Oreo28", 437, 18.0),
+//   createData("Oreo39", 437, 18.0),
+// ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
 import { useEffect, useState } from "react";
 
@@ -672,29 +673,24 @@ export default function CustomPaginationActionsTable() {
   const [selected, setSelected] = React.useState("");
   const navigate = useNavigate();
 
-  // componentDidMount() {
-  //   CallService.getBooks().then((res) => {
-  //     console.log(res.data);
-  //     this.setState({ book_info: res.data });
-  //   });
-  // }
-
-  // const [data, setData] = React.useState([]);
-  const [row2, setRow2] = React.useState([]);
+  const [rows, setRows] = React.useState([]);
 
   const createRows = (data) => {
-    const rower = [];
+    let rower = [];
     data.forEach((element) => {
       rower.push(createData(element.name));
     });
 
-    setRow2(rower);
-    console.log("row2");
-    console.log(row2);
+    // Sorting by Name (Maybe do not need it)
+    rower = rower.sort((a, b) => (a.name < b.name ? -1 : 1));
+
+    setRows(rower);
+    // console.log("rows");
+    // console.log(rows);
   };
 
   const fetchData = () => {
-    CallService.getCalls()
+    TopicService.getTopics()
       .then((response) => response.data)
       .then((data) => {
         // console.log("hello");
@@ -709,7 +705,7 @@ export default function CustomPaginationActionsTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - row2.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -732,8 +728,8 @@ export default function CustomPaginationActionsTable() {
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableBody>
             {(rowsPerPage > 0
-              ? row2.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : row2
+              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
             ).map((row) => (
               <TableRow
                 key={row.name}
@@ -770,12 +766,12 @@ export default function CustomPaginationActionsTable() {
               <TablePagination
                 rowsPerPageOptions={[8, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={row2.length}
+                count={rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
                   inputProps: {
-                    "aria-label": "row2 per page",
+                    "aria-label": "rows per page",
                   },
                   native: true,
                 }}
