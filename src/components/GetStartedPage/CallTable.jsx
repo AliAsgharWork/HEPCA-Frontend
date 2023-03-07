@@ -738,7 +738,8 @@ export default function CustomPaginationActionsTable() {
                 //   setSelected(row.name);
 
                 onClick={() => {
-                  navigate("/listCall=" + row.name);
+                  localStorage.setItem("selectedDocument", row.name);
+                  navigate("/search");
                 }}
               >
                 {/* <Link to={"../search" + row.name}> */}
