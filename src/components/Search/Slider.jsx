@@ -116,8 +116,12 @@ const Input = styled(MuiInput)`
 function valuetext(value) {
   return `${value}°C`;
 }
+
+const upper_limit = 0;
+const lower_limit = 9;
+
 export default function InputSlider() {
-  const [value, setValue] = React.useState([2, 8]);
+  const [value, setValue] = React.useState([upper_limit, lower_limit]);
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
@@ -155,8 +159,8 @@ export default function InputSlider() {
             onBlur={handleBlur}
             inputProps={{
               step: 1,
-              min: 0,
-              max: 9,
+              min: upper_limit,
+              max: lower_limit,
               type: "number",
               "aria-labelledby": "input-slider",
               style: {
@@ -179,8 +183,8 @@ export default function InputSlider() {
             valueLabelDisplay="auto"
             step={1}
             marks
-            min={0}
-            max={9}
+            min={upper_limit}
+            max={lower_limit}
           />
         </Grid>
         <Grid item>
@@ -191,8 +195,8 @@ export default function InputSlider() {
             onBlur={handleBlur}
             inputProps={{
               step: 1,
-              min: 0,
-              max: 9,
+              min: upper_limit,
+              max: lower_limit,
               type: "number",
               "aria-labelledby": "input-slider",
               style: {

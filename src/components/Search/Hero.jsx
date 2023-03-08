@@ -5,15 +5,94 @@ import styles from "../../style";
 import Collapsible from "./Collapsible";
 import SearchBar from "./SearchBar";
 import Slider from "./Slider";
+import ResultsTable from "./ResultsTable";
+
+const columns = [
+  { field: "name", label: "Name" },
+  { field: "age", label: "Age" },
+  { field: "email", label: "Email" },
+];
+
+const rows = [
+  {
+    id: 1,
+    name: "John Doe",
+    age: 25,
+    email: "johndoe@example.com",
+    extraInfo: "This is some extra info about John Doe",
+  },
+  {
+    id: 2,
+    name: "John Doe",
+    age: 25,
+    email: "johndoe@example.com",
+    extraInfo: "This is some extra info about John Doe",
+  },
+  {
+    id: 3,
+    name: "John Doe",
+    age: 25,
+    email: "johndoe@example.com",
+    extraInfo: "This is some extra info about John Doe",
+  },
+  {
+    id: 4,
+    name: "Jane Doe",
+    age: 32,
+    email: "janedoe@example.com",
+    extraInfo: "This is some extra info about Jane Doe",
+  },
+  {
+    id: 5,
+    name: "Bob Smith",
+    age: 40,
+    email: "bobsmith@example.com",
+    extraInfo: "This is some extra info about Bob Smith",
+  },
+  {
+    id: 6,
+    name: "John Doe",
+    age: 25,
+    email: "johndoe@example.com",
+    extraInfo: "This is some extra info about John Doe",
+  },
+  // {
+  //   id: 7,
+  //   name: "John Doe",
+  //   age: 25,
+  //   email: "johndoe@example.com",
+  //   extraInfo: "This is some extra info about John Doe",
+  // },
+  // {
+  //   id: 8,
+  //   name: "John Doe",
+  //   age: 25,
+  //   email: "johndoe@example.com",
+  //   extraInfo: "This is some extra info about John Doe",
+  // },
+  // {
+  //   id: 9,
+  //   name: "Jane Doe",
+  //   age: 32,
+  //   email: "janedoe@example.com",
+  //   extraInfo: "This is some extra info about Jane Doe",
+  // },
+  // {
+  //   id: 10,
+  //   name: "Bob Smith",
+  //   age: 40,
+  //   email: "bobsmith@example.com",
+  //   extraInfo: "This is some extra info about Bob Smith",
+  // },
+];
 
 const Hero = () => {
-  const selectedDocument = localStorage.getItem("selectedDocument");
-
+  const selectedDocument = localStorage.getItem("selectedDocument"); //Data from GetStarted Page about the document
   let max_text_display = 25;
 
   const [searched, setSearched] = useState(true);
-
   const [text, setText] = useState("");
+
   const handleTextChange = (event) => {
     setText(event.target.value);
   };
@@ -108,8 +187,17 @@ const Hero = () => {
             </div>
           </Collapsible>
         </div>
+        <div className={`flex-1 mt-5`} hidden={searched ? true : false}>
+          <ResultsTable
+            rows={rows}
+            columns={columns}
+            rowsPerPageOptions={[5, 10, 25]}
+            defaultRowsPerPage={5}
+            collapsibleComponent={(row) => <p>{row.extraInfo}</p>}
+          />
+        </div>
         {/*/Filler*/}
-        <div className="mb-48"></div>
+        <div className="mb-52" hidden={searched ? false : true}></div>
       </div>
     </section>
   );

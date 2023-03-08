@@ -32,11 +32,13 @@ const SearchBar = (props) => {
         fullWidth
         value={props.text}
         onChange={props.handleTextChange}
+        required
+        // error={true}
       />
       <Button
         variant="contained"
         onClick={props.handleSearchSubmit}
-        disabled={props.text.length > 0 ? false : true}
+        // disabled={props.text.length > 0 ? false : true}
       >
         Search
       </Button>
