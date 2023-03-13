@@ -1,92 +1,120 @@
 import { Button, Collapse, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "../../style";
 import Collapsible from "./Collapsible";
 import SearchBar from "./SearchBar";
 import Slider from "./Slider";
 import ResultsTable from "./ResultsTable";
+import CallService from "../../service/CallService";
 
 const columns = [
   { field: "name", label: "Name" },
-  { field: "age", label: "Age" },
-  { field: "email", label: "Email" },
+  { field: "budget_year", label: "Budget Year" },
+  { field: "overall_budget", label: "Overall Budget" },
+  { field: "budget", label: "Budget" },
+  { field: "eu_contribution", label: "EU Contribution" },
+  { field: "Number_of_projects_funded", label: "NOP" },
+  { field: "opening_date", label: "Opening" },
+  { field: "deadline_date", label: "Deadline" },
+  // { field: "full_name", label: "Email" },
+  { field: "trl", label: "TRL" },
+  { field: "Topic", label: "Topic" },
 ];
 
-const rows = [
-  {
-    id: 1,
-    name: "John Doe",
-    age: 25,
-    email: "johndoe@example.com",
-    extraInfo: "This is some extra info about John Doe",
-  },
-  {
-    id: 2,
-    name: "John Doe",
-    age: 25,
-    email: "johndoe@example.com",
-    extraInfo: "This is some extra info about John Doe",
-  },
-  {
-    id: 3,
-    name: "John Doe",
-    age: 25,
-    email: "johndoe@example.com",
-    extraInfo: "This is some extra info about John Doe",
-  },
-  {
-    id: 4,
-    name: "Jane Doe",
-    age: 32,
-    email: "janedoe@example.com",
-    extraInfo: "This is some extra info about Jane Doe",
-  },
-  {
-    id: 5,
-    name: "Bob Smith",
-    age: 40,
-    email: "bobsmith@example.com",
-    extraInfo: "This is some extra info about Bob Smith",
-  },
-  {
-    id: 6,
-    name: "John Doe",
-    age: 25,
-    email: "johndoe@example.com",
-    extraInfo: "This is some extra info about John Doe",
-  },
-  // {
-  //   id: 7,
-  //   name: "John Doe",
-  //   age: 25,
-  //   email: "johndoe@example.com",
-  //   extraInfo: "This is some extra info about John Doe",
-  // },
-  // {
-  //   id: 8,
-  //   name: "John Doe",
-  //   age: 25,
-  //   email: "johndoe@example.com",
-  //   extraInfo: "This is some extra info about John Doe",
-  // },
-  // {
-  //   id: 9,
-  //   name: "Jane Doe",
-  //   age: 32,
-  //   email: "janedoe@example.com",
-  //   extraInfo: "This is some extra info about Jane Doe",
-  // },
-  // {
-  //   id: 10,
-  //   name: "Bob Smith",
-  //   age: 40,
-  //   email: "bobsmith@example.com",
-  //   extraInfo: "This is some extra info about Bob Smith",
-  // },
-];
+// const rows = [
+//   {
+//     id: 1,
+//     name: "John Doe",
+//     age: 25,
+//     email: "johndoe@example.com",
+//     extraInfo: "This is some extra info about John Doe",
+//   },
+//   {
+//     id: 2,
+//     name: "John Doe",
+//     age: 25,
+//     email: "johndoe@example.com",
+//     extraInfo: "This is some extra info about John Doe",
+//   },
+// ]
 
 const Hero = () => {
+  const [rows, setRows] = React.useState([]);
+
+  function createData(
+    name,
+    budget_year,
+    overall_budget,
+    budget,
+    eu_contribution,
+    Number_of_projects_funded,
+    opening_date,
+    deadline_date,
+    full_name,
+    trl,
+    word_corpus,
+    Topic
+  ) {
+    return {
+      name,
+      budget_year,
+      overall_budget,
+      budget,
+      eu_contribution,
+      Number_of_projects_funded,
+      opening_date,
+      deadline_date,
+      // full_name,
+      trl,
+      word_corpus,
+      Topic,
+    };
+  }
+
+  const createRows = (data) => {
+    let rower = [];
+    data.forEach((element) => {
+      rower.push(
+        createData(
+          element.name,
+          element.budget_year,
+          element.overall_budget,
+          element.budget,
+          element.eu_contribution,
+          element.Number_of_projects_funded,
+          element.opening_date,
+          element.deadline_date,
+          element.full_name,
+          element.trl,
+          element.word_corpus,
+          element.Topic
+        )
+      );
+    });
+
+    // Sorting by Name (Maybe do not need it)
+    // rower = rower.sort((a, b) => (a.name < b.name ? -1 : 1)); DONT USE IT BREAKS PAGINATION
+
+    setRows(rower);
+    // console.log("rows");
+    // console.log(rows);
+  };
+
+  const fetchData = () => {
+    CallService.getCalls()
+      .then((response) => response.data)
+      .then((data) => {
+        // console.log("hello");
+        // createRows(data);
+        createRows(data);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const selectedDocument = localStorage.getItem("selectedDocument"); //Data from GetStarted Page about the document
   let max_text_display = 25;
 
@@ -193,7 +221,7 @@ const Hero = () => {
             columns={columns}
             rowsPerPageOptions={[5, 10, 25]}
             defaultRowsPerPage={5}
-            collapsibleComponent={(row) => <p>{row.extraInfo}</p>}
+            collapsibleComponent={(row) => <p>{row.word_corpus}</p>}
           />
         </div>
         {/*/Filler*/}
