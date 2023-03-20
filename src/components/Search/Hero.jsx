@@ -2,14 +2,39 @@ import { Button, Collapse, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "../../style";
-import Collapsible from "./Collapsible";
 import SearchBar from "./SearchBar";
-import Slider from "./Slider";
+import KeyAttributes from "./KeyAttributes";
 import ResultsTable from "./ResultsTable";
 import CallService from "../../service/CallService";
+import BERTCheckService from "../../service/BERTCheckService";
+import ScatterPlot from "../Charts/ScatterPlot";
+const dummy_data = {
+  datasets: [
+    {
+      label: "Scatter Dataset",
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 3 },
+        { x: 3, y: 5 },
+        { x: 4, y: 2 },
+        { x: 5, y: 4 },
+      ],
+      backgroundColor: "rgba(255, 99, 132, 1)",
+    },
+  ],
+};
+
+const options = {
+  scales: {
+    x: {
+      type: "linear",
+      position: "bottom",
+    },
+  },
+};
 
 const columns = [
-  { field: "name", label: "Name" },
+  { field: "full_name", label: "Name" },
   { field: "budget_year", label: "Budget Year" },
   { field: "overall_budget", label: "Overall Budget" },
   { field: "budget", label: "Budget" },
@@ -41,6 +66,7 @@ const columns = [
 
 const Hero = () => {
   const [rows, setRows] = React.useState([]);
+  const [plots, setPlots] = React.useState([]);
 
   function createData(
     name,
@@ -65,7 +91,7 @@ const Hero = () => {
       Number_of_projects_funded,
       opening_date,
       deadline_date,
-      // full_name,
+      full_name,
       trl,
       word_corpus,
       Topic,
@@ -101,24 +127,70 @@ const Hero = () => {
     // console.log(rows);
   };
 
-  const fetchData = () => {
-    CallService.getCalls()
-      .then((response) => response.data)
-      .then((data) => {
-        // console.log("hello");
-        // createRows(data);
-        createRows(data);
-      });
+  function createScatterFormatData(point1, point2) {
+    return { x: Math.round(point1), y: Math.round(point2) };
+  }
+  const createPlotData = (data) => {
+    let plotter = [];
+    data.forEach((element) => {
+      plotter.push(
+        createScatterFormatData(
+          eval(element.plot_values)[0],
+          eval(element.plot_values)[1]
+        )
+      );
+    });
+    let template = {};
+    template = {
+      datasets: [
+        {
+          label: "Scatter Dataset",
+          data: plotter,
+          backgroundColor: "rgba(255, 99, 132, 1)",
+        },
+      ],
+    };
+
+    console.log(template);
+    console.log(dummy_data);
+
+    setPlots(template);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  //THIS FETCHED ALL THE DATE AT ONCE
+  // const fetchData = () => {
+  //   CallService.getCalls()
+  //     .then((response) => response.data)
+  //     .then((data) => {
+  //       // console.log("hello");
+  //       // createRows(data);
+  //       console.log("hello", data);
+
+  //       createRows(data);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
+  const fetchSearchedData = (text) => {
+    BERTCheckService.getCalls(text)
+      .then((response) => response.data)
+      .then((data) => {
+        console.log("hello", data);
+        // createRows(data);
+        createRows(data);
+        createPlotData(data);
+        setPlotIsHere(true);
+      });
+  };
 
   const selectedDocument = localStorage.getItem("selectedDocument"); //Data from GetStarted Page about the document
   let max_text_display = 25;
 
   const [searched, setSearched] = useState(true);
+  const [plotishere, setPlotIsHere] = useState(false);
   const [text, setText] = useState("");
 
   const handleTextChange = (event) => {
@@ -126,7 +198,8 @@ const Hero = () => {
   };
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    setSearched(event.target.value);
+    setSearched(false);
+    fetchSearchedData(text);
   };
 
   return (
@@ -149,6 +222,12 @@ const Hero = () => {
                   ? text
                   : text.slice(0, max_text_display) + "...")}{" "}
           </h1>
+
+          <div className={`flex bg-white`} hidden={searched ? true : false}>
+            {plotishere && (
+              <ScatterPlot Data={plots} options={options}></ScatterPlot>
+            )}
+          </div>
         </div>
         <p className={`${styles.paragraph} max-w-[550px] mb-10`}>
           {searched
@@ -164,56 +243,7 @@ const Hero = () => {
           />
         </div>
         <div className={`flex-1 mt-5`} hidden={searched ? true : false}>
-          <Collapsible title={"Key Atributes"}>
-            <div
-              className={`flex flex-col space-x-0 space-y-3 sm:flex-row sm:space-x-4 sm:space-y-0`}
-
-              // className={`flex flex-row space-x-4 sm: flex-col sm: space-x-0`}
-            >
-              <div>
-                <TextField
-                  style={{ backgroundColor: "white" }} //, borderRadius: 18
-                  id="filled-basic"
-                  label="Budget"
-                  variant="filled"
-                ></TextField>
-              </div>
-              <div>
-                <TextField
-                  style={{ backgroundColor: "white" }} //, borderRadius: 18
-                  id="filled-basic"
-                  label="NOP"
-                  variant="filled"
-                ></TextField>
-              </div>
-              <div>
-                <TextField
-                  style={{ backgroundColor: "white" }} //, borderRadius: 18
-                  id="filled-basic"
-                  label="Start Date"
-                  variant="filled"
-                ></TextField>
-              </div>
-              <div>
-                <TextField
-                  style={{ backgroundColor: "white" }} //, borderRadius: 18
-                  id="filled-basic"
-                  label="Deadline Date"
-                  variant="filled"
-                ></TextField>
-              </div>
-              <div>
-                <Slider></Slider>
-              </div>
-              {/* <p className={`${styles.paragraph} max-w-[550px] mb-10`}>
-                Componet 1
-              </p> */}
-
-              {/* <p className={`${styles.paragraph} max-w-[550px] mb-10`}>
-                Componet 2
-              </p> */}
-            </div>
-          </Collapsible>
+          <KeyAttributes />
         </div>
         <div className={`flex-1 mt-5`} hidden={searched ? true : false}>
           <ResultsTable
@@ -224,8 +254,9 @@ const Hero = () => {
             collapsibleComponent={(row) => <p>{row.word_corpus}</p>}
           />
         </div>
+
         {/*/Filler*/}
-        <div className="mb-52" hidden={searched ? false : true}></div>
+        <div className="mb-60" hidden={searched ? false : true}></div>
       </div>
     </section>
   );
