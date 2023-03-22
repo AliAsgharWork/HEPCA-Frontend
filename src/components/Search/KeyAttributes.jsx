@@ -1,8 +1,9 @@
 import Collapsible from "./Collapsible";
 import Slider from "./Slider";
+import DateCalender from "./DateCalender";
 import { TextField } from "@mui/material";
 
-const KeyAttributes = () => {
+const KeyAttributes = (props) => {
   //   const [active, setActive] = useState("Home");
   //   const [toggle, setToggle] = useState(false);
 
@@ -13,23 +14,51 @@ const KeyAttributes = () => {
 
         // className={`flex flex-row space-x-4 sm: flex-col sm: space-x-0`}
       >
-        <div>
+        {/* <div>
           <TextField
             style={{ backgroundColor: "white" }} //, borderRadius: 18
             id="filled-basic"
             label="Budget"
             variant="filled"
           ></TextField>
+        </div> */}
+
+        <div>
+          <Slider
+            label="Budget (Millions)"
+            limit={[0, props.upper_budget_limit + 1]}
+          ></Slider>
         </div>
         <div>
+          <Slider
+            label="Overall Budget (Millions)"
+            limit={[0, props.upper_overall_budget_limit + 1]}
+          ></Slider>
+        </div>
+        <div>
+          <Slider
+            label="Number of Projects"
+            limit={[0, props.upper_NOP_limit + 1]}
+          ></Slider>
+        </div>
+        <div>
+          <Slider label="TRL" limit={[0, 9]} />
+        </div>
+        <div>
+          <DateCalender id="Deadline" label="Deadline" variant="filled" />
+        </div>
+        <div>
+          <DateCalender id="Start date" label="Start date" />
+        </div>
+        {/* <div>
           <TextField
-            style={{ backgroundColor: "white" }} //, borderRadius: 18
-            id="filled-basic"
-            label="NOP"
-            variant="filled"
+          style={{ backgroundColor: "white" }} //, borderRadius: 18
+          id="filled-basic"
+          label="NOP"
+          variant="filled"
           ></TextField>
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <TextField
             style={{ backgroundColor: "white" }} //, borderRadius: 18
             id="filled-basic"
@@ -44,10 +73,7 @@ const KeyAttributes = () => {
             label="Deadline Date"
             variant="filled"
           ></TextField>
-        </div>
-        <div>
-          <Slider></Slider>
-        </div>
+        </div> */}
         {/* <p className={`${styles.paragraph} max-w-[550px] mb-10`}>
                 Componet 1
               </p> */}

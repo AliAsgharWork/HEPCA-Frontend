@@ -117,10 +117,13 @@ function valuetext(value) {
   return `${value}°C`;
 }
 
-const upper_limit = 0;
-const lower_limit = 9;
+// const upper_limit = 0;
+// const lower_limit = 9;
 
-export default function InputSlider() {
+export default function InputSlider({ label, limit }) {
+  let upper_limit = limit[0];
+  let lower_limit = limit[1];
+
   const [value, setValue] = React.useState([upper_limit, lower_limit]);
 
   const handleSliderChange = (event, newValue) => {
@@ -146,9 +149,9 @@ export default function InputSlider() {
   };
 
   return (
-    <Box sx={{ width: 250 }}>
+    <Box sx={{ width: 220 }}>
       <Typography id="input-slider" color={"white"} gutterBottom>
-        TRL
+        {label}
       </Typography>
       <Grid container spacing={2} alignItems="center">
         <Grid item>

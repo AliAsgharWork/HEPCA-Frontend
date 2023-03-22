@@ -67,6 +67,10 @@ const columns = [
 const Hero = () => {
   const [rows, setRows] = React.useState([]);
   const [plots, setPlots] = React.useState([]);
+  //Max Values for these Fields
+  const [max_budget, setMaxBudget] = React.useState([]);
+  const [max_overall_budget, setMaxOverallBudget] = React.useState([]);
+  const [nop, setNumberOfProjects] = React.useState([]);
 
   function createData(
     name,
@@ -128,10 +132,14 @@ const Hero = () => {
   };
 
   function createScatterFormatData(point1, point2) {
-    return { x: Math.round(point1), y: Math.round(point2) };
+    return {
+      x: Math.round(point1),
+      y: Math.round(point2),
+    };
   }
   const createPlotData = (data) => {
     let plotter = [];
+    let plotter_q = [];
     data.forEach((element) => {
       plotter.push(
         createScatterFormatData(
@@ -140,13 +148,29 @@ const Hero = () => {
         )
       );
     });
+
+    console.log("query_isomap : ", data[0].query_isomap);
+    plotter_q.push({
+      x: Math.round(eval(data[0].query_isomap)[0]),
+      y: Math.round(eval(data[0].query_isomap)[1]),
+      pointBackgroundColor: "red",
+      pointBorderColor: "red",
+    });
+
     let template = {};
     template = {
       datasets: [
         {
-          label: "Scatter Dataset",
-          data: plotter,
+          label: "Query Point",
+          data: plotter_q,
           backgroundColor: "rgba(255, 99, 132, 1)",
+        },
+        {
+          label: "Result points",
+          data: plotter,
+          // backgroundColor: "rgba(255, 99, 132, 1)",
+          backgroundColor: "rgba(75,192,192,1)",
+          // pointBorderColor: "rgba(75,192,192,1)",
         },
       ],
     };
@@ -157,22 +181,43 @@ const Hero = () => {
     setPlots(template);
   };
 
+  // function formated(overall_budget, budget) {
+  //   return { overall_budget, budget };
+  // }
+  const calulateMaxBudgetValue = (data) => {
+    let budget = [];
+    let overall_budget = [];
+    let nop = [];
+    data.forEach((element) => {
+      budget.push(element.overall_budget);
+      overall_budget.push(element.budget);
+      nop.push(element.Number_of_projects_funded);
+    });
+
+    // console.log("XXX", Math.max(...budget));
+    setMaxBudget(Math.max(...budget));
+    setMaxOverallBudget(Math.max(...overall_budget));
+    setNumberOfProjects(Math.max(...nop));
+  };
+
   //THIS FETCHED ALL THE DATE AT ONCE
-  // const fetchData = () => {
-  //   CallService.getCalls()
-  //     .then((response) => response.data)
-  //     .then((data) => {
-  //       // console.log("hello");
-  //       // createRows(data);
-  //       console.log("hello", data);
+  const fetchData = () => {
+    CallService.getCalls()
+      .then((response) => response.data)
+      .then((data) => {
+        // console.log("hello");
+        // createRows(data);
+        console.log("hello", data);
 
-  //       createRows(data);
-  //     });
-  // };
+        // createRows(data);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+        calulateMaxBudgetValue(data);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const fetchSearchedData = (text) => {
     BERTCheckService.getCalls(text)
@@ -223,7 +268,10 @@ const Hero = () => {
                   : text.slice(0, max_text_display) + "...")}{" "}
           </h1>
 
-          <div className={`flex bg-white`} hidden={searched ? true : false}>
+          <div
+            className={`flex bg-white w-500 h-250`}
+            hidden={searched ? true : false}
+          >
             {plotishere && (
               <ScatterPlot Data={plots} options={options}></ScatterPlot>
             )}
@@ -243,7 +291,11 @@ const Hero = () => {
           />
         </div>
         <div className={`flex-1 mt-5`} hidden={searched ? true : false}>
-          <KeyAttributes />
+          <KeyAttributes
+            upper_budget_limit={max_budget}
+            upper_overall_budget_limit={max_overall_budget}
+            upper_NOP_limit={nop}
+          />
         </div>
         <div className={`flex-1 mt-5`} hidden={searched ? true : false}>
           <ResultsTable

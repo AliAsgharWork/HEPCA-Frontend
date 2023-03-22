@@ -22,7 +22,13 @@ const SearchBar = (props) => {
       autoComplete="off"
       // className={`flex flex-row space-x-3  `}
       className={`flex flex-col space-x-0 lg:flex-row lg:space-x-3 lg:space-y-0`}
-      onSubmit={props.handleSearchSubmit}
+      onSubmit={
+        props.text == ""
+          ? () => {
+              pass;
+            }
+          : props.handleSearchSubmit
+      }
     >
       <TextField
         style={{ backgroundColor: "white" }} //, borderRadius: 18
