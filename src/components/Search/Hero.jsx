@@ -5,8 +5,10 @@ import styles from "../../style";
 import SearchBar from "./SearchBar";
 import KeyAttributes from "./KeyAttributes";
 import ResultsTable from "./ResultsTable";
+import LSABERTSwitch from "./LSABERTSwitch";
 import CallService from "../../service/CallService";
 import BERTCheckService from "../../service/BERTCheckService";
+import LSACheckService from "../../service/LSACheckService";
 import ScatterPlot from "../Charts/ScatterPlot";
 const dummy_data = {
   datasets: [
@@ -65,12 +67,29 @@ const columns = [
 // ]
 
 const Hero = () => {
+  //Results Data
   const [rows, setRows] = React.useState([]);
+
+  //ISOMAP Plots Data
   const [plots, setPlots] = React.useState([]);
+
   //Max Values for these Fields
   const [max_budget, setMaxBudget] = React.useState([]);
   const [max_overall_budget, setMaxOverallBudget] = React.useState([]);
-  const [nop, setNumberOfProjects] = React.useState([]);
+  const [max_nop, setNumberOfProjects] = React.useState([]);
+
+  //Values for query
+  const [budget_value, setBudgetValue] = React.useState([]);
+  const [overallbudget_value, setOverallBudgetValue] = React.useState([]);
+  const [trl_value, setTRLValue] = React.useState([]);
+  const [nop_value, setNOPValue] = React.useState([]);
+  const [deadline_value, setDeadlineValue] = React.useState();
+  const [startdate_value, setStartDateValue] = React.useState();
+
+  //Initializomg Some Variables
+  const [searched, setSearched] = useState(true);
+  const [plotishere, setPlotIsHere] = useState(false);
+  const [text, setText] = useState("");
 
   function createData(
     name,
@@ -124,7 +143,7 @@ const Hero = () => {
     });
 
     // Sorting by Name (Maybe do not need it)
-    // rower = rower.sort((a, b) => (a.name < b.name ? -1 : 1)); DONT USE IT BREAKS PAGINATION
+    // rower = rower.sort((a, b) => (a.score < b.score ? -1 : 1)); //DONT USE IT BREAKS PAGINATION
 
     setRows(rower);
     // console.log("rows");
@@ -205,38 +224,70 @@ const Hero = () => {
     CallService.getCalls()
       .then((response) => response.data)
       .then((data) => {
-        // console.log("hello");
-        // createRows(data);
         console.log("hello", data);
-
-        // createRows(data);
-
         calulateMaxBudgetValue(data);
       });
+
+    console.log(max_budget);
   };
 
   useEffect(() => {
     fetchData();
+    // saveCurrentSearch("a", [0, 1], [0, 2], [0, 3], [0, 4]);
+    // loadCurrentSearch();
   }, []);
 
-  const fetchSearchedData = (text) => {
-    BERTCheckService.getCalls(text)
-      .then((response) => response.data)
-      .then((data) => {
-        console.log("hello", data);
-        // createRows(data);
-        createRows(data);
-        createPlotData(data);
-        setPlotIsHere(true);
-      });
-  };
+  const [isChecked, setIsChecked] = useState(false);
 
+  const fetchSearchedData = (
+    text,
+    trl_value,
+    budget_value,
+    overallbudget_value,
+    nop_value,
+    deadline_value,
+    startdate_value
+  ) => {
+    {
+      isChecked
+        ? LSACheckService.getCalls(
+            text,
+            trl_value,
+            budget_value,
+            overallbudget_value,
+            nop_value,
+            deadline_value,
+            startdate_value
+          )
+            .then((response) => response.data)
+            .then((data) => {
+              console.log("hello", data);
+              // createRows(data);
+              createRows(data);
+              createPlotData(data);
+              setPlotIsHere(true);
+            })
+        : BERTCheckService.getCalls(
+            text,
+            trl_value,
+            budget_value,
+            overallbudget_value,
+            nop_value,
+            deadline_value,
+            startdate_value
+          )
+            .then((response) => response.data)
+            .then((data) => {
+              console.log("hello", data);
+              // createRows(data);
+              createRows(data);
+              createPlotData(data);
+              setPlotIsHere(true);
+            });
+    }
+  };
   const selectedDocument = localStorage.getItem("selectedDocument"); //Data from GetStarted Page about the document
   let max_text_display = 25;
-
-  const [searched, setSearched] = useState(true);
-  const [plotishere, setPlotIsHere] = useState(false);
-  const [text, setText] = useState("");
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -244,7 +295,16 @@ const Hero = () => {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     setSearched(false);
-    fetchSearchedData(text);
+    console.log("budget print", budget_value);
+    fetchSearchedData(
+      text,
+      trl_value,
+      budget_value,
+      overallbudget_value,
+      nop_value,
+      deadline_value,
+      startdate_value
+    );
   };
 
   return (
@@ -268,6 +328,11 @@ const Hero = () => {
                   : text.slice(0, max_text_display) + "...")}{" "}
           </h1>
 
+          <div className={`pr-5`}>
+            <p style={{ color: "white" }}>Choose Model:</p>
+            <LSABERTSwitch handleModelBoolean={setIsChecked} />
+          </div>
+
           <div
             className={`flex bg-white w-500 h-250`}
             hidden={searched ? true : false}
@@ -281,6 +346,10 @@ const Hero = () => {
           {searched
             ? "What is your Search Query?"
             : "Filter thought Atributes "}{" "}
+          {/* ============================================ */}
+          {trl_value}, {budget_value}, {overallbudget_value},{nop_value},
+          {deadline_value},{startdate_value}
+          {/* ============================================ */}
         </p>
 
         <div className={`flex-1 w-full sm:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto `}>
@@ -294,7 +363,13 @@ const Hero = () => {
           <KeyAttributes
             upper_budget_limit={max_budget}
             upper_overall_budget_limit={max_overall_budget}
-            upper_NOP_limit={nop}
+            upper_NOP_limit={max_nop}
+            handleTRLValue={setTRLValue}
+            handleBudgetValue={setBudgetValue}
+            handleOverallBudgetValue={setOverallBudgetValue}
+            handleNOPValue={setNOPValue}
+            handleDeadlineValue={setDeadlineValue}
+            handleStartDateValue={setStartDateValue}
           />
         </div>
         <div className={`flex-1 mt-5`} hidden={searched ? true : false}>

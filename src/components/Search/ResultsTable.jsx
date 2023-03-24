@@ -84,7 +84,7 @@ function DataTable({
           {rows
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row) => (
-              <React.Fragment key={row.id}>
+              <React.Fragment key={row.name}>
                 <TableRow hover onClick={() => handleExpandRow(row)}>
                   {columns.map((column) => (
                     <TableCell key={`${row.id}-${column.field}`}>

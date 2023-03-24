@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CALL_API_BASE_URL = "http://127.0.0.1:8000/BERTcheck/";
+const CALL_API_BASE_URL = "http://127.0.0.1:8000/LSAcheck/";
 
 class CallService {
   //Value formatting
@@ -12,24 +12,8 @@ class CallService {
       return tag + "=[" + n + "]";
     }
   }
-  static date_f(tag, n) {
-    console.log(n);
-    if (n == "") {
-      return "";
-    } else {
-      return tag + "=" + n;
-    }
-  }
 
-  getCalls(
-    text,
-    trl_value,
-    budget_value,
-    overallbudget_value,
-    nop_value,
-    deadline_value,
-    startdate_value
-  ) {
+  getCalls(text, trl_value, budget_value, overallbudget_value, nop_value) {
     console.log(budget_value);
     return axios.get(
       CALL_API_BASE_URL +
@@ -39,8 +23,6 @@ class CallService {
         CallService.v_f("&overall_budget", overallbudget_value) +
         CallService.v_f("&nop", nop_value) +
         CallService.v_f("&trl", trl_value)
-      // CallService.date_f("&deadline", deadline_value)
-      // CallService.date_f("&startdate", startdate_value)
     );
   }
 

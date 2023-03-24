@@ -102,6 +102,7 @@
 // }
 
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -120,14 +121,47 @@ function valuetext(value) {
 // const upper_limit = 0;
 // const lower_limit = 9;
 
-export default function InputSlider({ label, limit }) {
+export default function InputSlider({ label, limit, handleValue, save_key }) {
   let upper_limit = limit[0];
   let lower_limit = limit[1];
 
-  const [value, setValue] = React.useState([upper_limit, lower_limit]);
+  const [value, setValue] = React.useState([]);
+
+  useEffect(() => {
+    const savedInputValue = localStorage.getItem(save_key);
+    const savedInputValue_array = eval("[" + savedInputValue + "]");
+    console.log(
+      "savedBugetvalue",
+      typeof savedInputValue,
+      savedInputValue,
+      "===",
+      typeof savedInputValue_array,
+      savedInputValue_array
+    );
+    //WHAT I AM DOING IS A VERY BAD THING, I WILL BE INITILAIZING THE LOCAL STORAGE
+    //VARIABLES WHICH WILL MAKE IT SO THAT IT WORKS AND THEN COMMENT OUT THE INITIAL THING TO KEEP THEM THINGS IN THE SAME
+    //ONCE I HAVE TIME I WILL BNE BACK TO FIX THIS ISSUE
+    if (savedInputValue) {
+      setValue(savedInputValue_array);
+      handleValue(savedInputValue);
+    }
+    // else if (savedInputValue == "") {
+    //   const initial_array = [upper_limit, lower_limit];
+    //   setValue(initial_array);
+    //   handleValue(initial_array);
+    // }
+  }, []);
+
+  useEffect(() => {
+    console.log("SAving");
+    localStorage.setItem(save_key, value);
+  }, [value]);
 
   const handleSliderChange = (event, newValue) => {
+    console.log(newValue);
+    // localStorage.setItem(save_key, newValue);
     setValue(newValue);
+    handleValue(newValue);
   };
 
   const handleInputChangeRight = (event) => {

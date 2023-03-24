@@ -25,30 +25,52 @@ const KeyAttributes = (props) => {
 
         <div>
           <Slider
-            label="Budget (Millions)"
-            limit={[0, props.upper_budget_limit + 1]}
+            label="Overall Budget (Millions)"
+            limit={[0, props.upper_overall_budget_limit + 1]}
+            handleValue={props.handleOverallBudgetValue}
+            save_key="overall_budget"
           ></Slider>
         </div>
         <div>
           <Slider
-            label="Overall Budget (Millions)"
-            limit={[0, props.upper_overall_budget_limit + 1]}
+            label="Budget (Millions)"
+            limit={[0, props.upper_budget_limit + 1]}
+            handleValue={props.handleBudgetValue}
+            save_key="budget"
           ></Slider>
         </div>
         <div>
           <Slider
             label="Number of Projects"
             limit={[0, props.upper_NOP_limit + 1]}
+            handleValue={props.handleNOPValue}
+            save_key="nop"
           ></Slider>
         </div>
         <div>
-          <Slider label="TRL" limit={[0, 9]} />
+          <Slider
+            label="TRL"
+            limit={[0, 9]}
+            handleValue={props.handleTRLValue}
+            save_key="trl"
+          />
         </div>
         <div>
-          <DateCalender id="Deadline" label="Deadline" variant="filled" />
+          <DateCalender
+            id="Deadline"
+            label="Deadline"
+            variant="filled"
+            handleDateChange={props.handleDeadlineValue}
+            save_key="deadline"
+          />
         </div>
         <div>
-          <DateCalender id="Start date" label="Start date" />
+          <DateCalender
+            id="Start date"
+            label="Start date"
+            handleDateChange={props.handleStartDateValue}
+            save_key="startdate"
+          />
         </div>
         {/* <div>
           <TextField
