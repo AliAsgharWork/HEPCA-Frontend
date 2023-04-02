@@ -345,7 +345,7 @@ const Hero = () => {
         <p className={`${styles.paragraph} max-w-[550px] mb-10`}>
           {searched
             ? "What is your Search Query?"
-            : "Filter thought Atributes "}{" "}
+            : "Filter through Attributes "}{" "}
           {/* ============================================ */}
           {trl_value}, {budget_value}, {overallbudget_value},{nop_value},
           {deadline_value},{startdate_value}

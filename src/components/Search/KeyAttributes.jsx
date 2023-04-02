@@ -8,7 +8,7 @@ const KeyAttributes = (props) => {
   //   const [toggle, setToggle] = useState(false);
 
   return (
-    <Collapsible title={"Key Atributes"}>
+    <Collapsible title={"Key Attributes"}>
       <div
         className={`flex flex-col space-x-0 space-y-3 sm:flex-row sm:space-x-4 sm:space-y-0`}
 

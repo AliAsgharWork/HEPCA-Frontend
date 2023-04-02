@@ -56,14 +56,12 @@ export default function DateCalender({ id, label, variant, handleDateChange }) {
 //       typeof savedInputValue_array,
 //       savedInputValue_array
 //     );
-//     //WHAT I AM DOING IS A VERY BAD THING, I WILL BE INITILAIZING THE LOCAL STORAGE
-//     //VARIABLES WHICH WILL MAKE IT SO THAT IT WORKS AND THEN COMMENT OUT THE INITIAL THING TO KEEP THEM THINGS IN THE SAME
-//     //ONCE I HAVE TIME I WILL BNE BACK TO FIX THIS ISSUE
+
 //     if (savedInputValue) {
 //       setValue(savedInputValue_array);
 //       handleDateChange(savedInputValue);
 //     }
-//     // else if (savedInputValue == "") {
+//     // else if (savedInputValue == null) {
 //     //   const initial_array = [upper_limit, lower_limit];
 //     //   setValue(initial_array);
 //     //   handleValue(initial_array);

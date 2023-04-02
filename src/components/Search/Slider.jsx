@@ -138,18 +138,15 @@ export default function InputSlider({ label, limit, handleValue, save_key }) {
       typeof savedInputValue_array,
       savedInputValue_array
     );
-    //WHAT I AM DOING IS A VERY BAD THING, I WILL BE INITILAIZING THE LOCAL STORAGE
-    //VARIABLES WHICH WILL MAKE IT SO THAT IT WORKS AND THEN COMMENT OUT THE INITIAL THING TO KEEP THEM THINGS IN THE SAME
-    //ONCE I HAVE TIME I WILL BNE BACK TO FIX THIS ISSUE
+
     if (savedInputValue) {
       setValue(savedInputValue_array);
       handleValue(savedInputValue);
+    } else if (savedInputValue == null) {
+      const initial_array = [upper_limit, lower_limit];
+      setValue(initial_array);
+      handleValue(initial_array);
     }
-    // else if (savedInputValue == "") {
-    //   const initial_array = [upper_limit, lower_limit];
-    //   setValue(initial_array);
-    //   handleValue(initial_array);
-    // }
   }, []);
 
   useEffect(() => {
