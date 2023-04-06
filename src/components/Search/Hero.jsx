@@ -165,12 +165,17 @@ const Hero = () => {
     let plotter = [];
     let plotter_q = [];
     data.forEach((element) => {
-      plotter.push(
-        createScatterFormatData(
-          eval(element.plot_values)[0],
-          eval(element.plot_values)[1]
-        )
-      );
+      if (
+        selectedDocument == element.Topic ||
+        selectedDocument == "Select All"
+      ) {
+        plotter.push(
+          createScatterFormatData(
+            eval(element.plot_values)[0],
+            eval(element.plot_values)[1]
+          )
+        );
+      }
     });
 
     console.log("query_isomap : ", data[0].query_isomap);
