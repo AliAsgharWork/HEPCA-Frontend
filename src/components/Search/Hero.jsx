@@ -124,22 +124,27 @@ const Hero = () => {
   const createRows = (data) => {
     let rower = [];
     data.forEach((element) => {
-      rower.push(
-        createData(
-          element.name,
-          element.budget_year,
-          element.overall_budget,
-          element.budget,
-          element.eu_contribution,
-          element.Number_of_projects_funded,
-          element.opening_date,
-          element.deadline_date,
-          element.full_name,
-          element.trl,
-          element.word_corpus,
-          element.Topic
-        )
-      );
+      if (
+        selectedDocument == element.Topic ||
+        selectedDocument == "Select All"
+      ) {
+        rower.push(
+          createData(
+            element.name,
+            element.budget_year,
+            element.overall_budget,
+            element.budget,
+            element.eu_contribution,
+            element.Number_of_projects_funded,
+            element.opening_date,
+            element.deadline_date,
+            element.full_name,
+            element.trl,
+            element.word_corpus,
+            element.Topic
+          )
+        );
+      }
     });
 
     // Sorting by Name (Maybe do not need it)
@@ -378,12 +383,12 @@ const Hero = () => {
             columns={columns}
             rowsPerPageOptions={[5, 10, 25]}
             defaultRowsPerPage={5}
-            collapsibleComponent={(row) => <p>{row.word_corpus}</p>}
+            // collapsibleComponent={(row) => <p>{row.word_corpus}</p>}
           />
         </div>
 
         {/*/Filler*/}
-        <div className="mb-60" hidden={searched ? false : true}></div>
+        <div className="mb-72" hidden={searched ? false : true}></div>
       </div>
     </section>
   );
