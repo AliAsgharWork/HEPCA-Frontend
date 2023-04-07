@@ -360,8 +360,8 @@ const Hero = () => {
             ? "What is your Search Query?"
             : "Filter through Attributes "}{" "}
           {/* ============================================ */}
-          {trl_value}, {budget_value}, {overallbudget_value},{nop_value},
-          {deadline_value},{startdate_value}
+          {/* {trl_value}, {budget_value}, {overallbudget_value},{nop_value},
+          {deadline_value},{startdate_value} */}
           {/* ============================================ */}
         </p>
 
