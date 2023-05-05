@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { close, HEPCA_Logo, menu } from "../assets";
-import { navLinks } from "../constants";
+import { close, HEPCA_Logo, menu } from "../../assets";
+import { navLinks } from "../../constants";
 
 const Navbar = () => {
   const [active, setActive] = useState("Home");
@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <nav className="w-full flex py-6 justify-between items-center navbar">
-      <img src={HEPCA_Logo} alt="hoobank" className="w-[150px] h-[50px]" />
+      <img src={HEPCA_Logo} alt="HEPCA_Logo" className="w-[150px] h-[50px]" />
       {/* <img src={HEPCA_logo} alt="hoobank" className="w-[124px] h-[32px]" /> */}
 
       <ul className="list-none sm:flex hidden justify-end items-center flex-1">

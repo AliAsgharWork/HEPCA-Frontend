@@ -10,7 +10,7 @@ import {
   Stats,
   Testimonials,
   Hero,
-} from "../components";
+} from "../components/Home";
 
 const Home = () => (
   <div className="bg-primary w-full overflow-hidden">
@@ -28,14 +28,14 @@ const Home = () => (
 
     <div className={`bg-primary ${styles.paddingX} ${styles.flexCenter}`}>
       <div className={`${styles.boxWidth}`}>
-        <Stats />
+        {/* <Stats /> */}
         <Business />
         {/* <Billing /> */}
         {/* <CardDeal /> */}
-        <Testimonials />
+        {/* <Testimonials /> */}
         {/* <Clients /> */}
-        <CTA />
-        <Footer />
+        {/* <CTA /> */}
+        {/* <Footer /> */}
       </div>
     </div>
   </div>

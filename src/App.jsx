@@ -45,13 +45,16 @@
 
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import { Home, GetStarted, Roz_test, Search } from "./pages";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/getstarted" element={<GetStarted />} />
+        <Route path="/roz_test" element={<Roz_test />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </BrowserRouter>
   );

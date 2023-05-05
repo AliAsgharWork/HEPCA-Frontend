@@ -16,6 +16,7 @@ import logo from "./logo.svg";
 // import HEPCA_Logo from "./Logos/logo.png";
 import HEPCA_Logo from "./Logos/logo2.png";
 import HEPCA_Logo_Favicon from "./Logos/8.png";
+import BIC_Logo from "./Logos/BIClogo.png";
 import quotes from "./quotes.svg";
 import robot from "./robot.png";
 import research from "./research.png";
@@ -46,6 +47,7 @@ export {
   logo,
   HEPCA_Logo,
   HEPCA_Logo_Favicon,
+  BIC_Logo,
   quotes,
   robot,
   research,
