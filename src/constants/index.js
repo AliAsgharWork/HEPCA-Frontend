@@ -54,7 +54,7 @@ export const features = [
     icon: send,
     title: "Fast Server",
     content:
-      "The use of state of the art algoritms to make comaprisons delivers fast results.",
+      "The use of state of the art algoritms to deliver fast results.",
   },
 ];
 
