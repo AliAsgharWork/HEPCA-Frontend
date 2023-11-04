@@ -155,20 +155,83 @@ const Hero = () => {
     // console.log(rows);
   };
 
+  // function createScatterFormatData(point1, point2) {
+  //   return {
+  //     x: Math.round(point1),
+  //     y: Math.round(point2),
+  //   };
+  // }
+  // const createPlotData = (data) => {
+  //   let plotter = [];
+  //   let plotter_q = [];
+  //   data.forEach((element) => {
+  //     if (
+  //       selectedDocument == element.Topic ||
+  //       selectedDocument == "Select All"
+  //     ) {
+  //       plotter.push(
+  //         createScatterFormatData(
+  //           eval(element.plot_values)[0],
+  //           eval(element.plot_values)[1]
+  //         )
+  //       );
+  //     }
+  //   });
+
+  //   console.log("query_isomap : ", data[0].query_isomap);
+  //   plotter_q.push({
+  //     x: Math.round(eval(data[0].query_isomap)[0]),
+  //     y: Math.round(eval(data[0].query_isomap)[1]),
+  //     pointBackgroundColor: "red",
+  //     pointBorderColor: "red",
+  //   });
+
+  //   let template = {};
+  //   template = {
+  //     datasets: [
+  //       {
+  //         label: "Query Point",
+  //         data: plotter_q,
+  //         backgroundColor: "rgba(255, 99, 132, 1)",
+  //       },
+  //       {
+  //         label: "Result points",
+  //         data: plotter,
+  //         // backgroundColor: "rgba(255, 99, 132, 1)",
+  //         backgroundColor: "rgba(75,192,192,1)",
+  //         // pointBorderColor: "rgba(75,192,192,1)",
+  //       },
+  //     ],
+  //   };
+
+  //   console.log(template);
+  //   console.log(dummy_data);
+
+  //   setPlots(template);
+  // };
+
+  // Define a function that rounds two values and returns them in an object
   function createScatterFormatData(point1, point2) {
     return {
       x: Math.round(point1),
       y: Math.round(point2),
     };
   }
+
+  // Define a function for creating plot data
   const createPlotData = (data) => {
+    // Initialize arrays to store plotted points
     let plotter = [];
     let plotter_q = [];
+
+    // Iterate through each element in the 'data' array
     data.forEach((element) => {
+      // Check if the selected document matches the current element's topic or "Select All"
       if (
         selectedDocument == element.Topic ||
         selectedDocument == "Select All"
       ) {
+        // Extract and round the x and y values from the 'element' and add them to 'plotter'
         plotter.push(
           createScatterFormatData(
             eval(element.plot_values)[0],
@@ -178,7 +241,10 @@ const Hero = () => {
       }
     });
 
+    // Log the 'query_isomap' value of the first element in 'data' to the console
     console.log("query_isomap : ", data[0].query_isomap);
+
+    // Create an object for the query point and add it to 'plotter_q'
     plotter_q.push({
       x: Math.round(eval(data[0].query_isomap)[0]),
       y: Math.round(eval(data[0].query_isomap)[1]),
@@ -186,7 +252,10 @@ const Hero = () => {
       pointBorderColor: "red",
     });
 
+    // Initialize a template object
     let template = {};
+
+    // Assign an object to 'template' with two datasets for plotting
     template = {
       datasets: [
         {
@@ -197,16 +266,19 @@ const Hero = () => {
         {
           label: "Result points",
           data: plotter,
-          // backgroundColor: "rgba(255, 99, 132, 1)",
           backgroundColor: "rgba(75,192,192,1)",
           // pointBorderColor: "rgba(75,192,192,1)",
         },
       ],
     };
 
+    // Log the 'template' object to the console
     console.log(template);
+
+    // Log a 'dummy_data' variable (not defined in this code)
     console.log(dummy_data);
 
+    // Set the 'template' object as the data for plotting (possibly updating a chart)
     setPlots(template);
   };
 
