@@ -10,6 +10,7 @@ import CallService from "../../service/CallService";
 import BERTCheckService from "../../service/BERTCheckService";
 import LSACheckService from "../../service/LSACheckService";
 import ScatterPlot from "../Charts/ScatterPlot";
+
 const dummy_data = {
   datasets: [
     {
@@ -86,9 +87,9 @@ const Hero = () => {
   const [deadline_value, setDeadlineValue] = React.useState();
   const [startdate_value, setStartDateValue] = React.useState();
 
-  //Initializomg Some Variables
+  //Initializomg Some Variables for 
   const [searched, setSearched] = useState(true);
-  const [plotishere, setPlotIsHere] = useState(false);
+  const [plotdataishere, setPlotDataIsHere] = useState(false);
   const [text, setText] = useState("");
 
   function createData(
@@ -155,61 +156,7 @@ const Hero = () => {
     // console.log(rows);
   };
 
-  // function createScatterFormatData(point1, point2) {
-  //   return {
-  //     x: Math.round(point1),
-  //     y: Math.round(point2),
-  //   };
-  // }
-  // const createPlotData = (data) => {
-  //   let plotter = [];
-  //   let plotter_q = [];
-  //   data.forEach((element) => {
-  //     if (
-  //       selectedDocument == element.Topic ||
-  //       selectedDocument == "Select All"
-  //     ) {
-  //       plotter.push(
-  //         createScatterFormatData(
-  //           eval(element.plot_values)[0],
-  //           eval(element.plot_values)[1]
-  //         )
-  //       );
-  //     }
-  //   });
-
-  //   console.log("query_isomap : ", data[0].query_isomap);
-  //   plotter_q.push({
-  //     x: Math.round(eval(data[0].query_isomap)[0]),
-  //     y: Math.round(eval(data[0].query_isomap)[1]),
-  //     pointBackgroundColor: "red",
-  //     pointBorderColor: "red",
-  //   });
-
-  //   let template = {};
-  //   template = {
-  //     datasets: [
-  //       {
-  //         label: "Query Point",
-  //         data: plotter_q,
-  //         backgroundColor: "rgba(255, 99, 132, 1)",
-  //       },
-  //       {
-  //         label: "Result points",
-  //         data: plotter,
-  //         // backgroundColor: "rgba(255, 99, 132, 1)",
-  //         backgroundColor: "rgba(75,192,192,1)",
-  //         // pointBorderColor: "rgba(75,192,192,1)",
-  //       },
-  //     ],
-  //   };
-
-  //   console.log(template);
-  //   console.log(dummy_data);
-
-  //   setPlots(template);
-  // };
-
+//====================================== SCATTERPLOT =========================================
   // Define a function that rounds two values and returns them in an object
   function createScatterFormatData(point1, point2) {
     return {
@@ -222,6 +169,7 @@ const Hero = () => {
   const createPlotData = (data) => {
     // Initialize arrays to store plotted points
     let plotter = [];
+    let plotter_names = [];
     let plotter_q = [];
 
     // Iterate through each element in the 'data' array
@@ -237,7 +185,9 @@ const Hero = () => {
             eval(element.plot_values)[0],
             eval(element.plot_values)[1]
           )
-        );
+          );
+        //Add the names of tthe list of calls genrated from the results.
+        plotter_names.push(element.name)
       }
     });
 
@@ -255,7 +205,6 @@ const Hero = () => {
     // Initialize a template object
     let template = {};
 
-    // Assign an object to 'template' with two datasets for plotting
     template = {
       datasets: [
         {
@@ -263,12 +212,14 @@ const Hero = () => {
           data: plotter_q,
           backgroundColor: "rgba(255, 99, 132, 1)",
         },
-        {
-          label: "Result points",
-          data: plotter,
-          backgroundColor: "rgba(75,192,192,1)",
-          // pointBorderColor: "rgba(75,192,192,1)",
-        },
+        ...plotter.map((point, index) => ({
+          label: plotter_names[index],
+          data: [{
+            x: point.x,
+            y: point.y,
+          }],
+          backgroundColor: "rgba(75, 192, 192, 1)",
+        })),
       ],
     };
 
@@ -347,7 +298,7 @@ const Hero = () => {
               // createRows(data);
               createRows(data);
               createPlotData(data);
-              setPlotIsHere(true);
+              setPlotDataIsHere(true);
             })
         : BERTCheckService.getCalls(
             text,
@@ -364,7 +315,7 @@ const Hero = () => {
               // createRows(data);
               createRows(data);
               createPlotData(data);
-              setPlotIsHere(true);
+              setPlotDataIsHere(true);
             });
     }
   };
@@ -422,7 +373,7 @@ const Hero = () => {
             className={`flex bg-white w-500 h-250`}
             hidden={searched ? true : false}
           >
-            {plotishere && (
+            {plotdataishere && (
               <ScatterPlot Data={plots} options={options}></ScatterPlot>
             )}
           </div>
