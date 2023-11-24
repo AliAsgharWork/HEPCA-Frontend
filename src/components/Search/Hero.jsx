@@ -28,6 +28,9 @@ const dummy_data = {
 };
 
 const options = {
+  plugins: {
+    legend: {
+        display: false}},
   scales: {
     x: {
       type: "linear",
